@@ -46,7 +46,7 @@ const InfoBox = ({
         <div
           className="prof-pic"
           style={{
-            backgroundImage: `url("https://res.cloudinary.com/dyrkmzn7t/image/upload/v1663743090/cld-sample-2.jpg")`,
+            backgroundImage: `url("https://res.cloudinary.com/dyrkmzn7t/image/upload/v1674060633/default_profile_pic_w4yn7a.png")`,
           }}
           onClick={() => {
             setProfileToggle(true);
@@ -87,6 +87,14 @@ const InfoBox = ({
       </div>
       <div className="userlist">
         {messages
+          .sort((item, i) => {
+            for (const j of contactsInfo) {
+              if (j.mobNo === item.mobNo) {
+                return -1;
+              }
+            }
+            return 1;
+          })
           .filter((item, i) => {
             var boolean = false;
             for (var j of contactsInfo) {
@@ -100,6 +108,12 @@ const InfoBox = ({
             );
           })
           .map((item, i) => {
+            const unreadMessages = messageArray.reduce((a, c) => {
+              if (c.from === item.mobNo && c.read === false) {
+                a = a + 1;
+              }
+              return a;
+            }, 0);
             var lastMessageArray = "";
             for (let index = messageArray.length - 1; index >= 0; index--) {
               if (
@@ -112,12 +126,6 @@ const InfoBox = ({
             }
             const timeShow = new Date(lastMessageArray.time);
             const contact = contactsInfo.find((o) => o.mobNo === item.mobNo);
-            const unreadMessages = messageArrayUnread.reduce((a, c) => {
-              if (c.to === item.mobNo && c.read === false) {
-                a = a + 1;
-              }
-              return a;
-            }, 0);
             return (
               <div
                 className="userBox"
@@ -125,6 +133,15 @@ const InfoBox = ({
                 onClick={() => {
                   setReceiver(item.mobNo);
                   socket.emit("onlinestatusReq", item.mobNo);
+                  for (const j in messageArray) {
+                    if (messageArray[j].from === item.mobNo) {
+                      messageArray[j] = { ...messageArray[j], read: true };
+                    }
+                  }
+                  socket.emit("updateReadedMessage", {
+                    message: messageArray,
+                    user: user,
+                  });
                 }}
                 style={{
                   backgroundColor: receiver === item.mobNo && "#eaeee6",

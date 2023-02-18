@@ -2,7 +2,6 @@ import React from "react";
 import "./DoubleWindowScreen.css";
 const DoubleWindowScreen = () => {
   const refreshHandler = () => {
-    console.log("something");
     window.location.reload();
   };
   return (

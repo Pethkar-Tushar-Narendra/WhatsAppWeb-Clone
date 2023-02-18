@@ -78,7 +78,7 @@ const UserList = () => {
         localStorage.setItem("whatsAppMessages", JSON.stringify(data.messages));
       });
       socket.on("doublelogin", () => {
-        // setDoublelogin(true);
+        setDoublelogin(true);
       });
       socket.on("receiveMsg", (data) => {
         ctxDispatch({ type: "SET_MESSAGES", payload: data });

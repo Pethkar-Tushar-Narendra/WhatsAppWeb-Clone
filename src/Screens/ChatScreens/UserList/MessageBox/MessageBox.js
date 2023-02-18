@@ -29,6 +29,12 @@ const MessageBox = ({
   OnlieStatus,
 }) => {
   const receiverMessageArray = [];
+
+  const onEmojiClick = (e) => {
+    var str = (message + e.emoji).trim();
+    setMessage(str);
+    setEmojiToggle(false);
+  };
   return (
     <div className="messageBox">
       <div className="shade">
@@ -265,10 +271,13 @@ const MessageBox = ({
                   );
                 })}
             </div>
-            {console.log(receiverMessageArray)}
+            {/* {console.log(receiverMessageArray)} */}
             {emojiToggle && (
               <div className="picker">
-                <Picker pickerStyle={{ width: "100%" }} />
+                <Picker
+                  pickerStyle={{ width: "100%" }}
+                  onEmojiClick={onEmojiClick}
+                />
               </div>
             )}
             <div className="user-input">
