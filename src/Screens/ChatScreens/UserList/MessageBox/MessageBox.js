@@ -252,7 +252,11 @@ const MessageBox = ({
                           <p className="time">
                             {item.time &&
                               (date.getHours() < 12
-                                ? date.getHours()
+                                ? date.getHours() === 0
+                                  ? 12
+                                  : date.getHours()
+                                : date.getHours() - 12 === 0
+                                ? 12
                                 : date.getHours() - 12) +
                                 ":" +
                                 date.getMinutes() +
